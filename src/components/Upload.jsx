@@ -1,57 +1,54 @@
 import "./Upload.css";
 import { IoClose } from "react-icons/io5";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Box, Dialog, Divider, IconButton, TextField } from "@mui/material";
-import { NftStorageHttpService } from "../api/nftStorage";
-import { usePrepareContractWrite, useContractWrite } from "wagmi";
+import {
+	usePrepareContractWrite,
+	useContractWrite,
+	useWaitForTransaction,
+} from "wagmi";
 import StorageJSONInterface from "../abi/Storage.json";
+import { uploadFile } from "../api/lighthouse";
+import { Status } from "./Status";
 
 export const Upload = ({ isOpen, onClose }) => {
 	let loading = false;
 	const [size, setSize] = useState(0);
 	const [open, setOpen] = useState(false);
-	const [uploadUrl, setUploadUrl] = useState("");
+	const uploadUrlRef = useRef("");
 	const [file, setFile] = useState();
 	const [fileName, setFileName] = useState("");
-	const [address, setAddress] = useState("");
-	const nftStorageHttpService = new NftStorageHttpService();
+	const [status, setStatus] = useState(1);
+	const [statusOpen, setStatusOpen] = useState(false);
 
 	const { config } = usePrepareContractWrite({
 		address: "0x09DEb799D43b6e0f10344ec2cA7454F8dF9Ab83c",
 		abi: StorageJSONInterface.abi,
 		functionName: "addFile",
-		args: [[fileName, uploadUrl, size]],
+		args: [[fileName, uploadUrlRef.current, size]],
 	});
 
-	const { write } = useContractWrite(config);
+	const { data, write } = useContractWrite(config);
 
-	async function uploadToIpfs() {
-		if (loading) return;
+	const { isLoading, isSuccess } = useWaitForTransaction({
+		hash: data?.hash,
+	});
+
+	async function uploadToLighthouse() {
 		try {
-			loading = true;
-
-			// 1. Upload file to ipfs
-			const assetUrl = await nftStorageHttpService.pinFileToIPFS(file);
-
-			// 2. Upload data to ipfs
-			const metaDataUrl = await nftStorageHttpService.pinJSONToIPFS(
-				{ fileName },
-				assetUrl
-			);
-			setUploadUrl(metaDataUrl);
+			setStatusOpen(true);
+			const response = await uploadFile(file);
+			setStatus(1);
+			uploadUrlRef.current = `https://files.lighthouse.storage/viewFile/${response.data.Hash}`;
 			await new Promise((res, rej) =>
 				setTimeout(() => {
 					res(true);
-				}, 500)
+				}, 1000)
 			);
-			// 3. After file is uploaded to IPFS, pass the URL to mint it on chain
+			setStatus(2);
 			write?.();
-
-			// Redirect to home page
-			// navigate("/", { replace: true });
 		} catch (error) {
 			console.log(error);
-			loading = false;
 		}
 	}
 
@@ -62,7 +59,7 @@ export const Upload = ({ isOpen, onClose }) => {
 			console.log(f);
 			setSize(f.size);
 			setFileName(f.name);
-			setFile(f);
+			setFile(e);
 			// const validFile = checkFileType(f.name);
 			// if (!validFile) return;
 		} catch (error) {
@@ -76,6 +73,10 @@ export const Upload = ({ isOpen, onClose }) => {
 
 	return (
 		<Dialog open={open}>
+			<Status
+				isOpen={statusOpen}
+				newStatus={isLoading ? 3 : isSuccess ? 4 : status}
+			/>
 			<Box p={2} px={4}>
 				<IconButton
 					sx={{ position: "absolute", right: 2, top: 8 }}
@@ -96,13 +97,13 @@ export const Upload = ({ isOpen, onClose }) => {
 					flexDirection={"column"}
 					justifyContent={"center"}
 					my={2}
-					width={"30vw"}
+					width={"40vw"}
 				>
 					<Box mx={3} mb={2} width="100%">
 						<Divider></Divider>
 					</Box>
 					<Box
-						width={"30vw"}
+						width={"40vw"}
 						display={"flex"}
 						flexDirection={"column"}
 						alignItems={"flex-start"}
@@ -113,14 +114,14 @@ export const Upload = ({ isOpen, onClose }) => {
 								fullWidth
 								placeholder="File Name"
 								size="small"
-								value={address}
+								value={fileName}
 								onChange={(e) => {
-									setAddress(e.target.value);
+									setFileName(e.target.value);
 								}}
 							/>
 							<small>Default: Original file name</small>
 						</Box>
-						<Box sx={{ mb: "16px" }}>
+						{/* <Box sx={{ mb: "16px" }}>
 							<TextField
 								type={"text"}
 								fullWidth
@@ -132,7 +133,7 @@ export const Upload = ({ isOpen, onClose }) => {
 								}}
 							/>
 							<small>Default: Only your address</small>
-						</Box>
+						</Box> */}
 						<label htmlFor="file-upload">
 							<div className="image-picker">
 								<div>
@@ -148,7 +149,10 @@ export const Upload = ({ isOpen, onClose }) => {
 							</div>
 						</label>
 						<small>{fileName}</small>
-						<Box sx={{ width: "100%", mt: "24px" }} onClick={uploadToIpfs}>
+						<Box
+							sx={{ width: "100%", mt: "24px" }}
+							onClick={uploadToLighthouse}
+						>
 							<div className="upload-button">
 								<p>Upload</p>
 							</div>

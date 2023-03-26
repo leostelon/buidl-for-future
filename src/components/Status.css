@@ -1,0 +1,9 @@
+.status {
+	display: flex;
+	align-items: center;
+	margin: 8px 0;
+}
+
+.status h4 {
+	margin-left: 16px;
+}

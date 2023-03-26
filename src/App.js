@@ -61,6 +61,7 @@ function App() {
 			chainId: 80001,
 		});
 		setFiles(data[0]);
+		console.log(data[0])
 		setLoading(false);
 	}
 
@@ -122,7 +123,9 @@ function App() {
 											<td>{f.name}</td>
 											<td>{f.size.toString()} kb</td>
 											<td>
-												<a href={f.url}>View File</a>
+												<a href={f.url} target="_blank" rel="noreferrer">
+													View File
+												</a>
 											</td>
 										</tr>
 									))}

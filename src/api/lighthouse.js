@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 
 const API_KEY = process.env.REACT_APP_LIGHTHOUSE_KEY;
 
-export async function uploadFile(file, publicKey) {
+export async function uploadFile(file) {
 	try {
 		const sig = await encryptionSignature();
 		const response = await lighthouse.uploadEncrypted(
@@ -13,7 +13,7 @@ export async function uploadFile(file, publicKey) {
 			sig.signedMessage,
 			progressCallback
 		);
-		console.log(response);
+		return response;
 	} catch (error) {
 		alert(error.message);
 		console.log(error);
@@ -21,8 +21,8 @@ export async function uploadFile(file, publicKey) {
 }
 
 const encryptionSignature = async () => {
-	const provider = new ethers.BrowserProvider(window.ethereum);
-	const signer = await provider.getSigner();
+	const provider = new ethers.providers.Web3Provider(window.ethereum);
+	const signer = provider.getSigner();
 	const address = await signer.getAddress();
 	const messageRequested = (await lighthouse.getAuthMessage(address)).data
 		.message;
