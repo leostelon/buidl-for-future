@@ -1,0 +1,15 @@
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	padding: 16px 8px;
+}
+
+.navbar .upload-button {
+    background-color: black;
+	color: white;
+	padding: 4px 16px;
+	border-radius: 4px;
+	font-weight: 500;
+	margin-right: 32px;
+	cursor: pointer;
+}

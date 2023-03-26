@@ -1,0 +1,37 @@
+.image-picker {
+	border: 1px solid;
+	padding: 4px 16px;
+	border-radius: 4px;
+	font-weight: 500;
+	margin-right: 32px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.image-picker div {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: min-content;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.image-picker input[type="file"] {
+	display: none;
+}
+
+.upload-button {
+	background-color: black;
+	color: white;
+	padding: 16px;
+	border-radius: 4px;
+	font-weight: 500;
+	margin-right: 32px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

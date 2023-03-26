@@ -1,0 +1,64 @@
+{
+	"abi": [
+		{
+			"inputs": [
+				{
+					"components": [
+						{
+							"internalType": "string",
+							"name": "name",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "url",
+							"type": "string"
+						},
+						{
+							"internalType": "uint256",
+							"name": "size",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct Storage.File",
+					"name": "_params",
+					"type": "tuple"
+				}
+			],
+			"name": "addFile",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getFiles",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "string",
+							"name": "name",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "url",
+							"type": "string"
+						},
+						{
+							"internalType": "uint256",
+							"name": "size",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct Storage.File[]",
+					"name": "fileList",
+					"type": "tuple[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]
+}
