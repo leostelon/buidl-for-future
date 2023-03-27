@@ -1,52 +1,71 @@
 import "./Upload.css";
 import { IoClose } from "react-icons/io5";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Dialog, Divider, IconButton, TextField } from "@mui/material";
-import {
-	usePrepareContractWrite,
-	useContractWrite,
-	useWaitForTransaction,
-} from "wagmi";
 import StorageJSONInterface from "../abi/Storage.json";
 import { uploadFile } from "../api/lighthouse";
 import { Status } from "./Status";
+import { NftStorageHttpService } from "../api/nftStorage";
+import { STORAGE_CONTRACT_ADDRESS } from "../constant";
+import { getWalletAddress } from "../utils/wallet";
 
 export const Upload = ({ isOpen, onClose }) => {
 	let loading = false;
 	const [size, setSize] = useState(0);
 	const [open, setOpen] = useState(false);
-	const uploadUrlRef = useRef("");
 	const [file, setFile] = useState();
 	const [fileName, setFileName] = useState("");
+	const uploadUrlRef = useRef("");
+	const metaUrlRef = useRef("");
 	const [status, setStatus] = useState(1);
 	const [statusOpen, setStatusOpen] = useState(false);
-
-	const { config } = usePrepareContractWrite({
-		address: "0x09DEb799D43b6e0f10344ec2cA7454F8dF9Ab83c",
-		abi: StorageJSONInterface.abi,
-		functionName: "addFile",
-		args: [[fileName, uploadUrlRef.current, size]],
-	});
-
-	const { data, write } = useContractWrite(config);
-
-	const { isLoading, isSuccess } = useWaitForTransaction({
-		hash: data?.hash,
-	});
+	const nftStorageHttpService = new NftStorageHttpService();
 
 	async function uploadToLighthouse() {
 		try {
+			loading = true;
 			setStatusOpen(true);
-			const response = await uploadFile(file);
 			setStatus(1);
+			// 1. Upload file to lighthouse
+			const response = await uploadFile(file);
 			uploadUrlRef.current = `https://files.lighthouse.storage/viewFile/${response.data.Hash}`;
+
+			// 2. Upload JSON to ipfs
+			const metaDataUrl = await nftStorageHttpService.pinJSONToIPFS(
+				{ title: fileName, description: "Encrypted and secured." },
+				uploadUrlRef.current
+			);
+			metaUrlRef.current = metaDataUrl;
 			await new Promise((res, rej) =>
 				setTimeout(() => {
 					res(true);
 				}, 1000)
 			);
 			setStatus(2);
-			write?.();
+			writeToContract();
+		} catch (error) {
+			loading = false;
+			console.log(error);
+		}
+	}
+
+	async function writeToContract() {
+		try {
+			const contract = new window.web3.eth.Contract(
+				StorageJSONInterface.abi,
+				STORAGE_CONTRACT_ADDRESS
+			);
+			const currentAddress = await getWalletAddress();
+			const resp = await contract.methods
+				.addFile([fileName, uploadUrlRef.current, size], metaUrlRef.current)
+				.send({ from: currentAddress })
+				.on("transactionHash", function (hash) {
+					setStatus(3);
+				})
+				.on("receipt", async function (receipt) {
+					setStatus(4);
+				});
+			return resp;
 		} catch (error) {
 			console.log(error);
 		}
@@ -56,7 +75,6 @@ export const Upload = ({ isOpen, onClose }) => {
 		try {
 			const f = e.target.files[0];
 			if (!f) return;
-			console.log(f);
 			setSize(f.size);
 			setFileName(f.name);
 			setFile(e);
@@ -73,10 +91,7 @@ export const Upload = ({ isOpen, onClose }) => {
 
 	return (
 		<Dialog open={open}>
-			<Status
-				isOpen={statusOpen}
-				newStatus={isLoading ? 3 : isSuccess ? 4 : status}
-			/>
+			<Status isOpen={statusOpen} newStatus={status} />
 			<Box p={2} px={4}>
 				<IconButton
 					sx={{ position: "absolute", right: 2, top: 8 }}
@@ -97,13 +112,13 @@ export const Upload = ({ isOpen, onClose }) => {
 					flexDirection={"column"}
 					justifyContent={"center"}
 					my={2}
-					width={"40vw"}
+					width={"30vw"}
 				>
 					<Box mx={3} mb={2} width="100%">
 						<Divider></Divider>
 					</Box>
 					<Box
-						width={"40vw"}
+						width={"30vw"}
 						display={"flex"}
 						flexDirection={"column"}
 						alignItems={"flex-start"}

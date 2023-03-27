@@ -1,12 +1,13 @@
 import { getWalletAddress } from "./wallet";
 import StorageJSONInterface from "../abi/Storage.json";
+import { STORAGE_CONTRACT_ADDRESS } from "../constant";
 
 export async function uploadFileContract(name, url, size) {
 	try {
 		const currentAddress = await getWalletAddress();
 		const contract = new window.web3.eth.Contract(
 			StorageJSONInterface.abi,
-			"0x09deb799d43b6e0f10344ec2ca7454f8df9ab83c"
+			STORAGE_CONTRACT_ADDRESS
 		);
 
 		const transaction = await contract.methods

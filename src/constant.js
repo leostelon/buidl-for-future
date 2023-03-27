@@ -51,3 +51,5 @@ export const mumbaiChain = {
 	},
 	testnet: false,
 };
+
+export const STORAGE_CONTRACT_ADDRESS = "0x40CC626e331dFA77e294302A3C4bc7190D1AaCA3";

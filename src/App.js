@@ -10,11 +10,11 @@ import {
 	RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mumbaiChain } from "./constant";
+import { mumbaiChain, STORAGE_CONTRACT_ADDRESS } from "./constant";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { readContracts } from "@wagmi/core";
 import StorageInterface from "./abi/Storage.json";
-import { getWalletAddress } from "./utils/wallet";
+import { connectWalletToSite, getWalletAddress } from "./utils/wallet";
 import { Box } from "@mui/system";
 
 const { chains, provider } = configureChains(
@@ -50,7 +50,7 @@ function App() {
 
 	const storageContract = {
 		abi: StorageInterface.abi,
-		address: "0x09deb799d43b6e0f10344ec2ca7454f8df9ab83c",
+		address: STORAGE_CONTRACT_ADDRESS,
 	};
 
 	async function getFiles() {
@@ -60,9 +60,10 @@ function App() {
 			overrides: { from: currentAddress },
 			chainId: 80001,
 		});
-		setFiles(data[0]);
-		console.log(data[0])
+		setFiles([]);
+		console.log(data[0]);
 		setLoading(false);
+		setFiles(data[0]);
 	}
 
 	function onClose() {
@@ -70,6 +71,10 @@ function App() {
 	}
 
 	useEffect(() => {
+		// setInterval(() => {
+		// 	getFiles();
+		// }, 5000);
+		connectWalletToSite();
 		getFiles();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -132,6 +137,17 @@ function App() {
 								</tbody>
 							</table>
 						)}
+						<div
+							onClick={() => getFiles()}
+							style={{
+								color: "blue",
+								cursor: "pointer",
+								padding: "16px",
+								textAlign: "center",
+							}}
+						>
+							Refresh
+						</div>
 					</div>
 				</div>
 			</RainbowKitProvider>

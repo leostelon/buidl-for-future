@@ -37,13 +37,13 @@ export const Status = ({ isOpen, newStatus }) => {
 					flexDirection={"column"}
 					justifyContent={"center"}
 					my={2}
-					width={"50vw"}
+					width={"30vw"}
 				>
 					<Box mx={3} mb={2} width="100%">
 						<Divider></Divider>
 					</Box>
 					<Box
-						width={"50vw"}
+						width={"30vw"}
 						display={"flex"}
 						flexDirection={"column"}
 						alignItems={"flex-start"}
