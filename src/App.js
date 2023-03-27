@@ -10,7 +10,7 @@ import {
 	RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mumbaiChain, STORAGE_CONTRACT_ADDRESS } from "./constant";
+import { shardeumChain, STORAGE_CONTRACT_ADDRESS } from "./constant";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { readContracts } from "@wagmi/core";
 import StorageInterface from "./abi/Storage.json";
@@ -21,7 +21,7 @@ import { WelcomeScreen } from "./screens/Welcome";
 const { chains, provider } = configureChains(
 	[
 		{
-			...mumbaiChain,
+			...shardeumChain,
 			iconUrl:
 				"https://images.yourstory.com/cs/images/companies/1646851374267-1666158419806.jpg?fm=auto&ar=1:1&mode=fill&fill=solid&fill-color=fffhttps://example.com/icon.svg",
 		},
@@ -60,7 +60,7 @@ function App() {
 		const data = await readContracts({
 			contracts: [{ ...storageContract, functionName: "getFiles" }],
 			overrides: { from: currentAddress },
-			chainId: 80001,
+			chainId: 8082,
 		});
 		setFiles([]);
 		console.log(data[0]);

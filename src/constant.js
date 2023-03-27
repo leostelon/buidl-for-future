@@ -1,5 +1,5 @@
 export const shardeumChain = {
-	id: 8081,
+	id: 8082,
 	name: "Shardeum",
 	network: "shardeum",
 	nativeCurrency: {
@@ -9,7 +9,7 @@ export const shardeumChain = {
 	},
 	rpcUrls: {
 		default: {
-			http: ["https://liberty20.shardeum.org/"],
+			http: ["https://sphinx.shardeum.org/"],
 		},
 		public: {
 			http: [],
@@ -18,7 +18,7 @@ export const shardeumChain = {
 	blockExplorers: {
 		default: {
 			name: "Shardeum Explorer",
-			url: "https://explorer-liberty20.shardeum.org/",
+			url: "https://explorer-sphinx.shardeum.org/",
 		},
 	},
 	testnet: false,
@@ -52,4 +52,6 @@ export const mumbaiChain = {
 	testnet: false,
 };
 
-export const STORAGE_CONTRACT_ADDRESS = "0x40CC626e331dFA77e294302A3C4bc7190D1AaCA3";
+// export const STORAGE_CONTRACT_ADDRESS = "0x40CC626e331dFA77e294302A3C4bc7190D1AaCA3";
+export const STORAGE_CONTRACT_ADDRESS =
+	"0x5EFE958DCEf7eF48450D6370dcfEb7Beb823CE5E";

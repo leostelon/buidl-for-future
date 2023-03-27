@@ -29,11 +29,11 @@ export const WelcomeScreen = ({ onCloseWelcome }) => {
 				<Box position={"relative"} className="content-container">
 					{/* <Box className="gradient-container"></Box> */}
 					<Box className="main-title">
-						<p>Encrypt</p>
+						<p>Encrypt & Trade</p>
+						<p>Important Files on</p>
 						<p>
-							<span className="nft-title">IMPORTANT FILES</span>
+							<span className="nft-title">IPFS & Shardeum💙</span>
 						</p>
-						<p>on IPFS💙</p>
 					</Box>
 					<Box className="welcome-button-container">
 						<Box className="continue-button" onClick={onCloseWelcome}>
