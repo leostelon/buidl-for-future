@@ -57,7 +57,10 @@ export const Upload = ({ isOpen, onClose }) => {
 			);
 			const currentAddress = await getWalletAddress();
 			const resp = await contract.methods
-				.addFile([fileName, uploadUrlRef.current, size], metaUrlRef.current)
+				.addFile(
+					[fileName, uploadUrlRef.current, size, STORAGE_CONTRACT_ADDRESS, 0],
+					metaUrlRef.current
+				)
 				.send({ from: currentAddress })
 				.on("transactionHash", function (hash) {
 					setStatus(3);

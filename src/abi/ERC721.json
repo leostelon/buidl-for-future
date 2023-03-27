@@ -1,4 +1,5 @@
 {
+	"contractName": "Spriyo",
 	"abi": [
 		{
 			"inputs": [],
@@ -61,69 +62,6 @@
 				{
 					"indexed": true,
 					"internalType": "address",
-					"name": "buyer",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "contractAddress",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "uint256",
-					"name": "tokenId",
-					"type": "uint256"
-				},
-				{
-					"components": [
-						{
-							"internalType": "uint256",
-							"name": "id",
-							"type": "uint256"
-						},
-						{
-							"internalType": "address",
-							"name": "seller",
-							"type": "address"
-						},
-						{
-							"internalType": "address",
-							"name": "contractAddress",
-							"type": "address"
-						},
-						{
-							"internalType": "uint256",
-							"name": "tokenId",
-							"type": "uint256"
-						},
-						{
-							"internalType": "uint256",
-							"name": "price",
-							"type": "uint256"
-						},
-						{
-							"internalType": "bool",
-							"name": "sold",
-							"type": "bool"
-						}
-					],
-					"indexed": false,
-					"internalType": "struct Storage.Sale",
-					"name": "sale",
-					"type": "tuple"
-				}
-			],
-			"name": "EventSale",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
 					"name": "from",
 					"type": "address"
 				},
@@ -154,64 +92,6 @@
 				}
 			],
 			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "_salesCount",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "_value",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"components": [
-						{
-							"internalType": "string",
-							"name": "name",
-							"type": "string"
-						},
-						{
-							"internalType": "string",
-							"name": "url",
-							"type": "string"
-						},
-						{
-							"internalType": "uint256",
-							"name": "size",
-							"type": "uint256"
-						},
-						{
-							"internalType": "address",
-							"name": "contractAddress",
-							"type": "address"
-						},
-						{
-							"internalType": "uint256",
-							"name": "tokenId",
-							"type": "uint256"
-						}
-					],
-					"internalType": "struct Storage.File",
-					"name": "_params",
-					"type": "tuple"
-				},
-				{
-					"internalType": "string",
-					"name": "metadataUrl",
-					"type": "string"
-				}
-			],
-			"name": "addFile",
-			"outputs": [],
-			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -255,32 +135,6 @@
 			"inputs": [
 				{
 					"internalType": "uint256",
-					"name": "_saleId",
-					"type": "uint256"
-				}
-			],
-			"name": "buySale",
-			"outputs": [],
-			"stateMutability": "payable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "_saleId",
-					"type": "uint256"
-				}
-			],
-			"name": "cancelBuyPrice",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
 					"name": "tokenId",
 					"type": "uint256"
 				}
@@ -291,91 +145,6 @@
 					"internalType": "address",
 					"name": "",
 					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "getFiles",
-			"outputs": [
-				{
-					"components": [
-						{
-							"internalType": "string",
-							"name": "name",
-							"type": "string"
-						},
-						{
-							"internalType": "string",
-							"name": "url",
-							"type": "string"
-						},
-						{
-							"internalType": "uint256",
-							"name": "size",
-							"type": "uint256"
-						},
-						{
-							"internalType": "address",
-							"name": "contractAddress",
-							"type": "address"
-						},
-						{
-							"internalType": "uint256",
-							"name": "tokenId",
-							"type": "uint256"
-						}
-					],
-					"internalType": "struct Storage.File[]",
-					"name": "fileList",
-					"type": "tuple[]"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "getSales",
-			"outputs": [
-				{
-					"components": [
-						{
-							"internalType": "uint256",
-							"name": "id",
-							"type": "uint256"
-						},
-						{
-							"internalType": "address",
-							"name": "seller",
-							"type": "address"
-						},
-						{
-							"internalType": "address",
-							"name": "contractAddress",
-							"type": "address"
-						},
-						{
-							"internalType": "uint256",
-							"name": "tokenId",
-							"type": "uint256"
-						},
-						{
-							"internalType": "uint256",
-							"name": "price",
-							"type": "uint256"
-						},
-						{
-							"internalType": "bool",
-							"name": "sold",
-							"type": "bool"
-						}
-					],
-					"internalType": "struct Storage.Sale[]",
-					"name": "saleList",
-					"type": "tuple[]"
 				}
 			],
 			"stateMutability": "view",
@@ -479,57 +248,13 @@
 				},
 				{
 					"internalType": "bytes",
-					"name": "data",
+					"name": "_data",
 					"type": "bytes"
 				}
 			],
 			"name": "safeTransferFrom",
 			"outputs": [],
 			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"name": "sales",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "id",
-					"type": "uint256"
-				},
-				{
-					"internalType": "address",
-					"name": "seller",
-					"type": "address"
-				},
-				{
-					"internalType": "address",
-					"name": "contractAddress",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "tokenId",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "price",
-					"type": "uint256"
-				},
-				{
-					"internalType": "bool",
-					"name": "sold",
-					"type": "bool"
-				}
-			],
-			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -548,48 +273,6 @@
 			"name": "setApprovalForAll",
 			"outputs": [],
 			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_contractAddress",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_tokenId",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_price",
-					"type": "uint256"
-				}
-			],
-			"name": "setBuyPrice",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes4",
-					"name": "interfaceId",
-					"type": "bytes4"
-				}
-			],
-			"name": "supportsInterface",
-			"outputs": [
-				{
-					"internalType": "bool",
-					"name": "",
-					"type": "bool"
-				}
-			],
-			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -649,25 +332,6 @@
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "tokenId",
-					"type": "uint256"
-				}
-			],
-			"name": "tokenURI",
-			"outputs": [
-				{
-					"internalType": "string",
-					"name": "",
-					"type": "string"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "totalSupply",
 			"outputs": [
@@ -702,6 +366,169 @@
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "_tokeURI",
+					"type": "string"
+				}
+			],
+			"name": "mint",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
+				}
+			],
+			"name": "burn",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
+				}
+			],
+			"name": "tokenURI",
+			"outputs": [
+				{
+					"internalType": "string",
+					"name": "",
+					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes4",
+					"name": "interfaceId",
+					"type": "bytes4"
+				}
+			],
+			"name": "supportsInterface",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
 		}
-	]
+	],
+	"networks": {
+		"56": {
+			"events": {},
+			"links": {},
+			"address": "0x42929B58DD889A2fd5fF92c872564c17D5a06D26",
+			"transactionHash": "0x093aaea4efdc94d6848664517d0446145debf8bf389d6b249680026ed3fa45ac"
+		},
+		"5777": {
+			"events": {},
+			"links": {},
+			"address": "0x4a8b1D523fBDB57CC0d13dB7584edD20c21236dD",
+			"transactionHash": "0x1a81f3ec2fbf460acc409a447a864b8a8a40db6314a2e6d23fb0ac946ab095e4"
+		},
+		"80001": {
+			"events": {},
+			"links": {},
+			"address": "0x3237Ae6D5004Df3f521090D8FaD3277EEd6ab137",
+			"transactionHash": "0x4eaf66c013a91e851354b55ea545d2dc6ebd8e56865c6b5c36fb7b7fc935b98e"
+		},
+		"97": {
+			"events": {},
+			"links": {},
+			"address": "0xD3Be4416aaC7EEAe6baFa846d51412AB151337eC",
+			"transactionHash": "0x54c1ef8c3c660f9a011576519ac1787ed7506b652194bd33da461c08ff3c1ce9"
+		},
+		"8080": {
+			"events": {},
+			"links": {},
+			"address": "0xdd4c71b099b68a8a18c8e629c6acda9bd495abe2",
+			"transactionHash": "0xabc95c8e02e9d621a130363490a94d7aad705f4fcf28135fef373e64561ff012"
+		},
+		"8081": {
+			"events": {},
+			"links": {},
+			"address": "0x4F65017F74311AB393a9772ddfb459C0dbdd44bb",
+			"transactionHash": "0xbd1e70a9af2343033d1e354fe25671eb52018fe1bdc7552b58e434318bbdbd98"
+		}
+	},
+	"schemaVersion": "3.4.7",
+	"updatedAt": "2022-05-27T04:11:15.237Z",
+	"devdoc": {
+		"kind": "dev",
+		"methods": {
+			"approve(address,uint256)": {
+				"details": "See {IERC721-approve}."
+			},
+			"balanceOf(address)": {
+				"details": "See {IERC721-balanceOf}."
+			},
+			"getApproved(uint256)": {
+				"details": "See {IERC721-getApproved}."
+			},
+			"isApprovedForAll(address,address)": {
+				"details": "See {IERC721-isApprovedForAll}."
+			},
+			"name()": {
+				"details": "See {IERC721Metadata-name}."
+			},
+			"ownerOf(uint256)": {
+				"details": "See {IERC721-ownerOf}."
+			},
+			"safeTransferFrom(address,address,uint256)": {
+				"details": "See {IERC721-safeTransferFrom}."
+			},
+			"safeTransferFrom(address,address,uint256,bytes)": {
+				"details": "See {IERC721-safeTransferFrom}."
+			},
+			"setApprovalForAll(address,bool)": {
+				"details": "See {IERC721-setApprovalForAll}."
+			},
+			"symbol()": {
+				"details": "See {IERC721Metadata-symbol}."
+			},
+			"tokenByIndex(uint256)": {
+				"details": "See {IERC721Enumerable-tokenByIndex}."
+			},
+			"tokenOfOwnerByIndex(address,uint256)": {
+				"details": "See {IERC721Enumerable-tokenOfOwnerByIndex}."
+			},
+			"totalSupply()": {
+				"details": "See {IERC721Enumerable-totalSupply}."
+			},
+			"transferFrom(address,address,uint256)": {
+				"details": "See {IERC721-transferFrom}."
+			}
+		},
+		"version": 1
+	},
+	"userdoc": {
+		"kind": "user",
+		"methods": {},
+		"version": 1
+	}
 }

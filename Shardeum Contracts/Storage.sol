@@ -19,6 +19,8 @@ contract Storage is ERC721URIStorage, ERC721Enumerable {
         string name;
         string url;
         uint256 size;
+        address contractAddress;
+        uint256 tokenId;
     }
 
     struct Sale {
@@ -42,14 +44,17 @@ contract Storage is ERC721URIStorage, ERC721Enumerable {
 
     function addFile(File memory _params, string memory metadataUrl) public {
         _assetCount.increment();
+        uint currentAssetId = _assetCount.current();
+
         File[] storage f = files[msg.sender];
         File memory file = File({
             name: _params.name,
             url: _params.url,
-            size: _params.size
+            size: _params.size,
+            contractAddress: address(this),
+            tokenId: currentAssetId
         });
 
-        uint currentAssetId = _assetCount.current();
         _mint(msg.sender, currentAssetId);
         _setTokenURI(currentAssetId, metadataUrl);
 
@@ -105,6 +110,7 @@ contract Storage is ERC721URIStorage, ERC721Enumerable {
             msg.sender,
             sale.tokenId
         );
+        sale.sold = true;
 
         emit EventSale(sale.seller, sale.contractAddress, sale.tokenId, sale);
     }
@@ -120,6 +126,25 @@ contract Storage is ERC721URIStorage, ERC721Enumerable {
         }
 
         return fileList;
+    }
+
+    function getSales() public view returns (Sale[] memory saleList) {
+        uint256 totalLength;
+
+        for (uint256 i = 1; i <= _salesCount.current(); i++) {
+            if (sales[i].sold == false) {
+                totalLength++;
+            }
+        }
+        saleList = new Sale[](totalLength);
+
+        for (uint256 i = 1; i <= _salesCount.current(); i++) {
+            if (sales[i].sold == false) {
+                saleList[totalLength - i] = sales[i];
+            }
+        }
+
+        return saleList;
     }
 
     // Overrides
