@@ -16,6 +16,7 @@ import { readContracts } from "@wagmi/core";
 import StorageInterface from "./abi/Storage.json";
 import { connectWalletToSite, getWalletAddress } from "./utils/wallet";
 import { Box } from "@mui/system";
+import { WelcomeScreen } from "./screens/Welcome";
 
 const { chains, provider } = configureChains(
 	[
@@ -47,6 +48,7 @@ function App() {
 	const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
 	const [files, setFiles] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [isWelcomeScreen, setIsWelcomeScreen] = useState(false);
 
 	const storageContract = {
 		abi: StorageInterface.abi,
@@ -70,10 +72,18 @@ function App() {
 		setUploadDialogOpen(false);
 	}
 
+	function onCloseWelcome() {
+		setIsWelcomeScreen(false);
+	}
+
 	useEffect(() => {
 		// setInterval(() => {
 		// 	getFiles();
 		// }, 5000);
+		const isWelcome = localStorage.getItem("welcome");
+		if (isWelcome === "false") {
+			setIsWelcomeScreen(true);
+		}
 		connectWalletToSite();
 		getFiles();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,74 +92,78 @@ function App() {
 	return (
 		<WagmiConfig client={wagmiClient}>
 			<RainbowKitProvider chains={chains}>
-				<div className="App">
-					<div className="navbar">
-						<div>
-							<h2>Privacy Legal🔐</h2>
-						</div>
-						<div style={{ display: "flex" }}>
-							<div
-								className="upload-button"
-								onClick={() => setUploadDialogOpen(true)}
-							>
-								<div>
-									<p>Upload</p>
-								</div>
-								<Upload isOpen={uploadDialogOpen} onClose={onClose} />
+				{isWelcomeScreen ? (
+					<WelcomeScreen onCloseWelcome={onCloseWelcome} />
+				) : (
+					<div className="App">
+						<div className="navbar">
+							<div>
+								<h2>Privacy Legal🔐</h2>
 							</div>
+							<div style={{ display: "flex" }}>
+								<div
+									className="upload-button"
+									onClick={() => setUploadDialogOpen(true)}
+								>
+									<div>
+										<p>Upload</p>
+									</div>
+									<Upload isOpen={uploadDialogOpen} onClose={onClose} />
+								</div>
+								<div
+									style={{
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "center",
+									}}
+								>
+									<ConnectButton />
+								</div>
+							</div>
+						</div>
+						<div className="body">
+							{loading ? (
+								<Box mt={2}>
+									<h3>Fetching files...</h3>
+								</Box>
+							) : (
+								<table>
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Size</th>
+											<th>File</th>
+										</tr>
+									</thead>
+									<tbody>
+										{files.map((f, i) => (
+											<tr key={i}>
+												<td>{f.name}</td>
+												<td>{f.size.toString()} kb</td>
+												<td>
+													<a href={f.url} target="_blank" rel="noreferrer">
+														View File
+													</a>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							)}
 							<div
+								onClick={() => getFiles()}
 								style={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
+									color: "blue",
+									cursor: "pointer",
+									padding: "16px",
+									textAlign: "center",
 								}}
 							>
-								<ConnectButton />
+								Refresh
 							</div>
 						</div>
 					</div>
-					<div className="body">
-						{loading ? (
-							<Box mt={2}>
-								<h3>Fetching files...</h3>
-							</Box>
-						) : (
-							<table>
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Size</th>
-										<th>File</th>
-									</tr>
-								</thead>
-								<tbody>
-									{files.map((f, i) => (
-										<tr key={i}>
-											<td>{f.name}</td>
-											<td>{f.size.toString()} kb</td>
-											<td>
-												<a href={f.url} target="_blank" rel="noreferrer">
-													View File
-												</a>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						)}
-						<div
-							onClick={() => getFiles()}
-							style={{
-								color: "blue",
-								cursor: "pointer",
-								padding: "16px",
-								textAlign: "center",
-							}}
-						>
-							Refresh
-						</div>
-					</div>
-				</div>
+				)}
 			</RainbowKitProvider>
 		</WagmiConfig>
 	);

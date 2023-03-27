@@ -31,7 +31,7 @@ export const mumbaiChain = {
 	nativeCurrency: {
 		decimals: 18,
 		name: "MATIC",
-		symbol: "MATIC",
+		symbol: "SHM",
 	},
 	rpcUrls: {
 		default: {
