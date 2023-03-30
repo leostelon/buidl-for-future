@@ -141,7 +141,7 @@ function App() {
 
 	useEffect(() => {
 		const isWelcome = localStorage.getItem("welcome");
-		if (isWelcome === "false") {
+		if (isWelcome !== "true") {
 			setIsWelcomeScreen(true);
 		}
 		connectWalletToSite();
