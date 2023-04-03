@@ -22,6 +22,10 @@ import StorageJSONInterface from "./abi/Storage.json";
 import Web3 from "web3";
 import { checkApproval } from "./utils/checkApproval";
 import { Processing } from "./components/Processing";
+import { Grid } from "@mui/material";
+import { PostAd } from "./components/PostAd";
+import { loadMyPostStreams } from "./utils/dataverse";
+import { getShortAddress } from "./utils/addressShort";
 
 const { chains, provider } = configureChains(
 	[
@@ -58,12 +62,15 @@ const wagmiClient = createClient({
 
 function App() {
 	const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+	const [postDialogOpen, setPostUploadDialogOpen] = useState(false);
 	const [files, setFiles] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [isWelcomeScreen, setIsWelcomeScreen] = useState(false);
 	const [marketTab, setMarketTab] = useState(false);
+	const [timeLineTab, setTimeLineTab] = useState(false);
 	const [saleProcessing, setSaleProcessing] = useState(false);
 	const [saleProcessingComplete, setsaleProcessingComplete] = useState(false);
+	const [posts, setPosts] = useState([]);
 
 	const storageContract = {
 		abi: StorageInterface.abi,
@@ -135,8 +142,17 @@ function App() {
 		setUploadDialogOpen(false);
 	}
 
+	function onPostClose() {
+		setPostUploadDialogOpen(false);
+	}
+
 	function onCloseWelcome() {
 		setIsWelcomeScreen(false);
+	}
+
+	async function getPosts() {
+		const results = await loadMyPostStreams();
+		setPosts(results);
 	}
 
 	useEffect(() => {
@@ -146,6 +162,7 @@ function App() {
 		}
 		connectWalletToSite();
 		getFiles();
+		getPosts();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -163,16 +180,41 @@ function App() {
 							<div style={{ display: "flex" }}>
 								<div style={{ display: "flex", marginRight: "24px" }}>
 									<div
-										className={`nav-option ${marketTab ? "" : "active"}`}
-										onClick={() => setMarketTab(!marketTab)}
+										className={`nav-option ${
+											marketTab || timeLineTab ? "" : "active"
+										}`}
+										onClick={() => {
+											setMarketTab(false);
+											setTimeLineTab(false);
+										}}
 									>
 										<p>Files</p>
 									</div>
 									<div
 										className={`nav-option ${marketTab ? "active" : ""}`}
-										onClick={() => setMarketTab(!marketTab)}
+										onClick={() => {
+											setMarketTab(!marketTab);
+											setTimeLineTab(false);
+										}}
 									>
 										<p>Market</p>
+									</div>
+									<div
+										className={`nav-option ${timeLineTab ? "active" : ""}`}
+										onClick={() => {
+											setTimeLineTab(!timeLineTab);
+											setMarketTab(false);
+										}}
+									>
+										<p>Timeline</p>
+									</div>
+									<div
+										className={`nav-option`}
+										onClick={() => {
+											setPostUploadDialogOpen(true);
+										}}
+									>
+										<p>Post Ad</p>
 									</div>
 								</div>
 								<div
@@ -183,6 +225,7 @@ function App() {
 										<p>Upload</p>
 									</div>
 									<Upload isOpen={uploadDialogOpen} onClose={onClose} />
+									<PostAd isOpen={postDialogOpen} onClose={onPostClose} />
 								</div>
 								<div
 									style={{
@@ -196,7 +239,36 @@ function App() {
 							</div>
 						</div>
 						<div className="body">
-							{marketTab ? (
+							{timeLineTab ? (
+								<Grid
+									container
+									spacing={{ xs: 2, md: 3 }}
+									columns={{ xs: 4, sm: 8, md: 12 }}
+								>
+									{Object.entries(posts).map((asset, index) => (
+										<Grid item xs={12} sm={4} md={3} key={index}>
+											<Box
+												sx={{
+													p: 2,
+													m: 2,
+													minHeight: "10vw",
+													backgroundColor: "white",
+													boxShadow: "rgba(149, 157, 165, 0.3) 0px 4px 24px",
+													borderRadius: "8px",
+													overflow: "hidden",
+													width: "100%",
+												}}
+											>
+												<h3>
+													<span style={{ color: "grey" }}>By @</span>
+													{getShortAddress(asset[1].content.controller ?? "")}
+												</h3>
+												<h6>{asset[1].content.content}</h6>
+											</Box>
+										</Grid>
+									))}
+								</Grid>
+							) : marketTab ? (
 								<SaleList />
 							) : loading ? (
 								<Box mt={2}>

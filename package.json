@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dataverse/runtime-connector": "^1.0.26",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@lighthouse-web3/sdk": "^0.1.9",
